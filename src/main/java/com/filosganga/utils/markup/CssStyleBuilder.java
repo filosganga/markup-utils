@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -32,90 +33,98 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @version $Id$
  */
 public class CssStyleBuilder implements Serializable {
-	
+
 	private static final long serialVersionUID = 10L;
 
 	private final StringBuilder buffer;
-	
+
 	public CssStyleBuilder() {
 		buffer = new StringBuilder();
 	}
-	
-	public CssStyleBuilder appendProperty(String name, Object value){
-		
+
+	public CssStyleBuilder appendProperty(String name, Object value) {
+
 		String valueText = ObjectUtils.toString(value);
-		
-		if(StringUtils.isNotBlank(valueText)){
-			if(buffer.length()>0 && !buffer.substring(buffer.length()-1).equals(";")){
-				buffer.append(";");
-			}
+
+		if (StringUtils.isNotBlank(valueText)) {
+			BufferUtils.ensureSemicolonBefore(buffer);
 			buffer.append(name).append(":").append(valueText);
 		}
-		
+
 		return this;
 	}
-	
-	public CssStyleBuilder appendStyle(String style){
-		
-		if(StringUtils.isNotBlank(style)){
-			if(buffer.length()>0 && !buffer.substring(buffer.length()-1).equals(";")){
-				buffer.append(";");
-			}
+
+	public CssStyleBuilder appendStyle(String style) {
+
+		if (StringUtils.isNotBlank(style)) {
+			BufferUtils.ensureSemicolonBefore(buffer);
 			buffer.append(style);
 		}
-		
+
 		return this;
 	}
-	
-	public CssStyleBuilder openSelector(String selector){
-		
-		if(StringUtils.isNotBlank(selector)){
-			buffer.append(selector).append(" {\n");
+
+	public CssStyleBuilder openSelector(String selector) {
+
+		if (StringUtils.isNotBlank(selector)) {
+			BufferUtils.ensureSpaceBefore(buffer);
+			buffer.append(selector).append(" {");
 		}
-		
+
 		return this;
 	}
-	
-	public CssStyleBuilder closeSelector(){
-		
-		buffer.append("}\n");
-		
+
+	public CssStyleBuilder closeSelector() {
+
+		buffer.append("}");
+
 		return this;
 	}
-	
-	public String toCssStyle(){
+
+	/**
+	 * Appends new line to this builder.
+	 * 
+	 * @return a reference to this builder.
+	 */
+	public CssStyleBuilder appendNewLine() {
+
+		buffer.append(SystemUtils.LINE_SEPARATOR);
+
+		return this;
+	}
+
+	public String toCssStyle() {
 		return buffer.toString();
 	}
-	
+
 	// Commons methods ****************************************************
-	
+
 	@Override
 	public String toString() {
 
 		return toCssStyle();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		EqualsBuilder builder = new EqualsBuilder();
-		
+
 		builder.appendSuper(obj instanceof CssStyleBuilder);
-		if(builder.isEquals()){
-			CssStyleBuilder other = (CssStyleBuilder)obj;
+		if (builder.isEquals()) {
+			CssStyleBuilder other = (CssStyleBuilder) obj;
 			builder.append(buffer, other.buffer);
 		}
 
 		return builder.isEquals();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		HashCodeBuilder builder = new HashCodeBuilder();
-		
+
 		builder.append(getClass()).append(buffer);
-		
+
 		return builder.toHashCode();
 	}
-
 
 }

@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.filosganga.utils.markup.MarkupBuilder;
-
 @Test(groups = "unit")
 public class MarkupBuilderUnitTest {
 	

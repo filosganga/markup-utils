@@ -24,7 +24,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.Validate;
 
 /**
- * This Static class collects come methods useful to build HTML like markup
+ * This Static class collects some methods useful to build HTML like markup
  * 
  * @author Filippo De Luca
  * @version $Id$
@@ -139,11 +139,7 @@ public final class MarkupUtils {
 		String valueString = ObjectUtils.toString(value);
 
 		if (StringUtils.isNotBlank(valueString)) {
-			if (buffer.length() != 0
-					&& !buffer.substring(buffer.length() - 1, buffer.length())
-							.equalsIgnoreCase(" ")) {
-				buffer.append(" ");
-			}
+			BufferUtils.ensureSpaceBefore(buffer);
 			buffer.append(name).append("=\"").append(valueString).append("\"");
 		}
 
@@ -157,11 +153,7 @@ public final class MarkupUtils {
 		String valueString = ObjectUtils.toString(value);
 
 		if (StringUtils.isNotBlank(valueString)) {
-			if (!(buffer.length() <= 0)
-					&& !(buffer.charAt(buffer.length() - 1) == ' ')) {
-				buffer.append(' ');
-			}
-
+			BufferUtils.ensureSpaceBefore(buffer);
 			buffer.append(name).append("=\"").append(valueString).append("\"");
 		}
 

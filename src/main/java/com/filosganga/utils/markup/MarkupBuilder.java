@@ -32,141 +32,227 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @version $Id$
  */
 public class MarkupBuilder implements Serializable {
-	
+
 	private static final long serialVersionUID = 10L;
 
 	private final StringBuilder buffer;
-	
+
 	public MarkupBuilder() {
 		buffer = new StringBuilder();
 	}
-	
-	
-	public MarkupBuilder startOpenElement(String name){
-		
-		if(StringUtils.isNotBlank(name)){
+
+	/**
+	 * Start open element, appending &quot;&lt;&quot; plus element name.
+	 * <p>
+	 * Ex: &quot;&lt;div&quot;
+	 * </p>
+	 * 
+	 * @param name
+	 *            The name of the element to start
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder startOpenElement(String name) {
+
+		if (StringUtils.isNotBlank(name)) {
 			buffer.append("<").append(name);
 		}
-		
+
 		return this;
 	}
 
-	public MarkupBuilder endOpenElement(){
-		
+	/**
+	 * End open element appending &quot;&gt;&quot;.
+	 * <p>
+	 * Ex: &quot;&gt;&quot;
+	 * </p>
+	 * 
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder endOpenElement() {
+
 		buffer.append(">");
-		
+
 		return this;
 	}
 
-	public MarkupBuilder openElement(String name){
-		
-		if(StringUtils.isNotBlank(name)){
+	/**
+	 * Opens element, appending &quot;&lt;&quot;, element name and
+	 * &quot;&gt;&quot;.
+	 * <p>
+	 * Ex: &quot;&lt;div&gt&quot;.
+	 * </p>
+	 * 
+	 * @param name
+	 *            The name of the element to open
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder openElement(String name) {
+
+		if (StringUtils.isNotBlank(name)) {
 			buffer.append("<").append(name).append(">");
 		}
-		
+
 		return this;
 	}
 
-	public MarkupBuilder closeElement(String name){
+	/**
+	 * Closes element, appending &quot;&lt;/&quot;, element name and
+	 * &quot;&gt;&quot;.
+	 * <p>
+	 * Ex: &quot;&lt;/div&gt&quot;.
+	 * </p>
+	 * 
+	 * @param name
+	 *            The name of the element to close
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder closeElement(String name) {
 
-		if(StringUtils.isNotBlank(name)){
+		if (StringUtils.isNotBlank(name)) {
 			buffer.append("</").append(name).append(">");
 		}
-		
+
 		return this;
 	}
 
-	public MarkupBuilder openCloseElement(String name){
-		
-		if(StringUtils.isNotBlank(name)){
+	/**
+	 * Append open-close element, appending &quot;&lt;&quot;, element name and
+	 * &quot;/&gt;&quot;.
+	 * <p>
+	 * Ex: &quot;&lt;div/&gt&quot;.
+	 * </p>
+	 * 
+	 * @param name
+	 *            The name of the element to append
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder openCloseElement(String name) {
+
+		if (StringUtils.isNotBlank(name)) {
 			buffer.append("<").append(name).append("/>");
 		}
 		return this;
 	}
 
-	public MarkupBuilder endOpenCloseElement(){
-		
+	/**
+	 * Ends open-close element, appending &quot;/&gt;&quot;.
+	 * <p>
+	 * Ex: &quot;/&gt&quot;.
+	 * </p>
+	 * 
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder endOpenCloseElement() {
+
 		buffer.append("/>");
-		
+
 		return this;
 	}
-	
-	public MarkupBuilder appendText(String text){
-		
-		if(StringUtils.isNotEmpty(text)){
+
+	/**
+	 * Appends text to this builder.
+	 * 
+	 * @param text
+	 *            The text to append.
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder appendText(String text) {
+
+		if (StringUtils.isNotEmpty(text)) {
 			buffer.append(text);
 		}
-		
+
 		return this;
 	}
-	
-	public MarkupBuilder appendNewLine(){
-		
+
+	/**
+	 * Appends new line to this builder.
+	 * 
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder appendNewLine() {
+
 		buffer.append(SystemUtils.LINE_SEPARATOR);
 
 		return this;
 	}
 
-	public MarkupBuilder appendAttribute(String name, String value){
-		
-		if(StringUtils.isNotBlank(value)){
-			if(buffer.length()!=0 && !buffer.substring(buffer.length()-1, buffer.length()).equalsIgnoreCase(" ")){
-				buffer.append(" ");
-			}
+	/**
+	 * Appends attribute to started element. If the attribute value is blank,
+	 * the builder does nothing.
+	 * <p>
+	 * Ex: class=&quot;foo&quot;
+	 * <p>
+	 * 
+	 * @param name The name of attribute to append.
+	 * @param value The value of attribute to append.
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder appendAttribute(String name, String value) {
+
+		if (StringUtils.isNotBlank(value)) {
+			BufferUtils.ensureSpaceBefore(buffer);
 			buffer.append(name).append("=\"").append(value).append("\"");
 		}
-		
+
 		return this;
 	}
-	
-    /**
-     * Append a comment
-     *
-     * @param comment to append
-     */
-    public MarkupBuilder appendComment(String comment) {
-    	
-    	if(StringUtils.isNotBlank(comment)){   		
-    		buffer.append("<!-- ").append(comment).append(" -->");
-    	}
-    	
-    	return this;
-    	
-    }
 
-	public String toMarkup(){
+	/**
+	 * Append a comment.
+	 * <p>
+	 * Ex: &lt;!-- comment --&gt;
+	 * 
+	 * @param comment The comment to append.
+	 * @return a reference to this builder.
+	 */
+	public MarkupBuilder appendComment(String comment) {
+
+		if (StringUtils.isNotBlank(comment)) {
+			buffer.append("<!-- ").append(comment).append(" -->");
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * Return the generated markup.
+	 * 
+	 * @return Generated markup.
+	 */
+	public String toMarkup() {
 		return buffer.toString();
 	}
-	
+
 	// Commons methods ****************************************************
-	
+
 	@Override
 	public String toString() {
-		
+
 		return toMarkup();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		EqualsBuilder builder = new EqualsBuilder();
-		
+
 		builder.appendSuper(obj instanceof MarkupBuilder);
-		if(builder.isEquals()){
-			MarkupBuilder other = (MarkupBuilder)obj;
+		if (builder.isEquals()) {
+			MarkupBuilder other = (MarkupBuilder) obj;
 			builder.append(buffer, other.buffer);
 		}
 
 		return builder.isEquals();
 	}
-	
+
 	@Override
 	public int hashCode() {
 		HashCodeBuilder builder = new HashCodeBuilder();
-		
+
 		builder.append(getClass()).append(buffer);
-		
+
 		return builder.toHashCode();
 	}
-
 
 }

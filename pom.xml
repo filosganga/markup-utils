@@ -1,0 +1,235 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.mobilefaces</groupId>
+	<artifactId>markup-utils</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<name>markup-utils</name>
+	<url>http://www.mobilefaces.org</url>
+	<description>This is a collection of utility class intended to help the development of Markup related Java projects.</description>
+	<inceptionYear>2009</inceptionYear>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License, version 3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+			<comments>Read the COPYING file</comments>
+		</license>
+		<license>
+			<name>GNU General Public License, version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
+			<comments>Read the COPYING.LESSER file</comments>
+		</license>
+	</licenses>
+	
+	<issueManagement>
+		<system>trac</system>
+		<url>http://www.mobilefaces.org/trac</url>
+	</issueManagement>
+
+	<organization>
+		<name>MobileFaces</name>
+		<url>http://www.mobilefaces.org</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>filosganga</id>
+			<name>Filippo De Luca</name>
+			<email>dl.filippo@filosganga.it</email>
+			<timezone>+1</timezone>
+			<organization>MobileFaces</organization>
+			<roles>
+				<role>Project Manager</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:svn:http://markup-utils.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://markup-utils.googlecode.com/svn/trunk/</developerConnection>
+		<url>http://code.google.com/p/markup-utils/source/browse/</url>
+	</scm>
+
+	<distributionManagement>
+		<!-- 
+		<site>
+			<id>site.mobilefaces.org</id>
+			<name>WURFL-Pro Maven Site</name>
+			<url>scpexe://didone.mobilefaces.org:/var/www/mobilefaces.org/htdocs/maven/markup-utils</url>
+		</site>
+		<repository>
+			<id>repo.mobilefaces.org</id>
+			<name>WURFL-Pro Repository</name>
+			<url>http://didone.mobilefaces.org/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot.mobilefaces.org</id>
+			<name>WURFL-Pro Snapshot Repository</name>
+			<url>http://didone.mobilefaces.org/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+		 -->
+	</distributionManagement>
+	
+	<properties>
+		<sl4j.version>1.5.5</sl4j.version>
+	</properties>	
+	
+	<dependencies>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<!-- LOGGING DEPENDENCIES - LOG4J -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${sl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${sl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${sl4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1</version>
+			<!-- Provided by slf4j -->
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>2.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>5.7</version>
+			<classifier>jdk15</classifier>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<!-- Build -->
+	<build>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<!-- 
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>
+							src/test/resources/testng.xml
+						</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin>
+			-->
+			
+			<plugin>
+            	<groupId>com.google.code.maven-license-plugin</groupId>
+            	<artifactId>maven-license-plugin</artifactId>
+            	<version>1.4.0</version>
+				<configuration>
+					<header>src/main/etc/header.txt</header>
+	                <properties>
+	                    <years>2009</years>
+	                    <organization.name>${project.organization.name}</organization.name>
+	                </properties>	                
+	                <mapping>
+						<java>SLASHSTAR_STYLE</java>
+					</mapping>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<targetJdk>1.5</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clover-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-changelog-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<configuration>
+					<threshold>Normal</threshold>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+</project>

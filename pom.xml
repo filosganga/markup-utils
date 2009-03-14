@@ -40,6 +40,16 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
+		<developer>
+			<id>fantayeneh</id>
+			<name>Asres Gizaw Fantayeneh</name>
+			<email>fantayeneh@gmail.com</email>
+			<timezone>0</timezone>
+			<roles>
+				<role>Project Manager</role>
+				<role>Developer</role>
+			</roles>
+		</developer>	
 	</developers>
 
 	<scm>

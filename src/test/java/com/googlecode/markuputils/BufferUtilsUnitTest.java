@@ -1,8 +1,10 @@
-package com.filosganga.utils.markup;
+package com.googlecode.markuputils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
+
+import com.googlecode.markuputils.BufferUtils;
 
 /**
  * @author Filippo De Luca

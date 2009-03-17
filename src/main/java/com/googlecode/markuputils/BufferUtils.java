@@ -16,7 +16,7 @@
  *
  * Copyright (c) 2009 Filippo De Luca
  */
-package com.filosganga.utils.markup;
+package com.googlecode.markuputils;
 
 /**
  * @author Filippo De Luca

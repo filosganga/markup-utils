@@ -16,13 +16,15 @@
  *
  * Copyright (c) 2009 Filippo De Luca
  */
-package com.filosganga.utils.markup;
+package com.googlecode.markuputils;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import com.googlecode.markuputils.MarkupBuilder;
 
 @Test(groups = "unit")
 public class MarkupBuilderUnitTest {

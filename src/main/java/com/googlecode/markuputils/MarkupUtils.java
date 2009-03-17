@@ -16,7 +16,7 @@
  *
  * Copyright (c) 2009 Filippo De Luca
  */
-package com.filosganga.utils.markup;
+package com.googlecode.markuputils;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;

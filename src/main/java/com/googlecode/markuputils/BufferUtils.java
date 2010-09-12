@@ -23,6 +23,7 @@ package com.googlecode.markuputils;
  * @version $Id$
  * 
  */
+@Deprecated
 public final class BufferUtils {
 
 	/**

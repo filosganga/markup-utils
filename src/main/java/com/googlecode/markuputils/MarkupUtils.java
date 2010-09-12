@@ -18,6 +18,8 @@
  */
 package com.googlecode.markuputils;
 
+import java.io.IOException;
+
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
@@ -31,152 +33,179 @@ import org.apache.commons.lang.Validate;
  */
 public final class MarkupUtils {
 
-	public static void startOpenElement(StringBuilder buffer, String name) {
+	private static <T extends Appendable & CharSequence> void append(T buffer, String appending) {
+		
+		Validate.notNull(buffer, "buffer cannot be null");
+		
+		try {
+			buffer.append(appending);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	// No side effect methods *********************************************
+	
+	public static String startOpenElement(String name) {
+		
+		StringBuilder buffer = new StringBuilder();
 
 		if (StringUtils.isNotBlank(name)) {
 			buffer.append("<").append(name);
 		}
+		
+		return buffer.toString();
 	}
-
-	public static void startOpenElement(StringBuffer buffer, String name) {
-
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("<").append(name);
-		}
+	
+	public static String endOpenElement() {		
+		return ">";
 	}
-
-	public static void endOpenElement(StringBuilder buffer) {
-
-		buffer.append(">");
-	}
-
-	public static void endOpenElement(StringBuffer buffer) {
-
-		buffer.append(">");
-	}
-
-	public static void openElement(StringBuilder buffer, String name) {
+	
+	public static String openElement(String name) {
+		
+		StringBuilder buffer = new StringBuilder();
 
 		if (StringUtils.isNotBlank(name)) {
 			buffer.append("<").append(name).append(">");
 		}
+		
+		return buffer.toString();
 	}
+	
+	public static String closeElement(String name) {
 
-	public static void openElement(StringBuffer buffer, String name) {
-
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("<").append(name).append(">");
-		}
-	}
-
-	public static void closeElement(StringBuilder buffer, String name) {
-
+		StringBuilder buffer = new StringBuilder();
+		
 		if (StringUtils.isNotBlank(name)) {
 			buffer.append("</").append(name).append(">");
 		}
+		
+		return buffer.toString();
 	}
-
-	public static void closeElement(StringBuffer buffer, String name) {
-
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("</").append(name).append(">");
-		}
-	}
-
-	public static void openCloseElement(StringBuilder buffer, String name) {
+	
+	public static String openCloseElement(String name) {
+		
+		StringBuilder buffer = new StringBuilder();
 
 		if (StringUtils.isNotBlank(name)) {
 			buffer.append("<").append(name).append("/>");
 		}
+		
+		return buffer.toString();
 	}
 
-	public static void openCloseElement(StringBuffer buffer, String name) {
-
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("<").append(name).append("/>");
-		}
+	public static String endOpenCloseElement() {
+		return "/>";
 	}
 
-	public static void endOpenCloseElement(StringBuilder buffer) {
+	public static String appendAttribute(String name, Object value) {
 
-		buffer.append("/>");
-	}
-
-	public static void endOpenCloseElement(StringBuffer buffer) {
-
-		buffer.append("/>");
-	}
-
-	public static void appendText(StringBuilder buffer, String text) {
-
-		if (StringUtils.isNotEmpty(text)) {
-			buffer.append(text);
-		}
-	}
-
-	public static void appendText(StringBuffer buffer, String text) {
-
-		if (StringUtils.isNotEmpty(text)) {
-			buffer.append(text);
-		}
-	}
-
-	public static void appendNewLine(StringBuilder buffer) {
-
-		buffer.append(SystemUtils.LINE_SEPARATOR);
-	}
-
-	public static void appendNewLine(StringBuffer buffer) {
-
-		buffer.append(SystemUtils.LINE_SEPARATOR);
-	}
-
-	public static void appendAttribute(StringBuilder buffer, String name,
-			Object value) {
-
-		Validate.notNull(buffer, "buffer must be not null");
+		StringBuilder buffer = new StringBuilder();
 
 		String valueString = ObjectUtils.toString(value);
 
 		if (StringUtils.isNotBlank(valueString)) {
-			BufferUtils.ensureSpaceBefore(buffer);
-			buffer.append(name).append("=\"").append(valueString).append("\"");
+			buffer.append(" ").append(name).append("=\"").append(valueString).append("\"");
 		}
+		
+		return buffer.toString();
 
 	}
+	
+	public static String appendNullableAttribute(String name, Object value) {
 
-	public static void appendAttribute(StringBuffer buffer, String name,
-			Object value) {
-
-		Validate.notNull(buffer, "buffer must be not null");
+		StringBuilder buffer = new StringBuilder();
 
 		String valueString = ObjectUtils.toString(value);
 
-		if (StringUtils.isNotBlank(valueString)) {
-			BufferUtils.ensureSpaceBefore(buffer);
-			buffer.append(name).append("=\"").append(valueString).append("\"");
+		buffer.append(" ").append(name).append("=\"").append(valueString).append("\"");
+		
+		return buffer.toString();
+	}
+
+	public static String appendComment(String comment) {
+		
+		StringBuilder buffer = new StringBuilder();
+		
+		if(StringUtils.isNotEmpty(comment)) {
+			buffer.append("<!-- ").append(comment).append(" -->");
 		}
-
+		
+		return buffer.toString();
+	}
+	
+	public static String appendText(String text) {
+		
+		if (StringUtils.isNotEmpty(text)) {
+			return text;
+		}
+		else {
+			return "";
+		}
 	}
 
+	// Buffer methods *****************************************************
+	
+	public static <T extends Appendable & CharSequence> void startOpenElement(T buffer, String name) {
+		
+		append(buffer, startOpenElement(name));
+	}
+
+	public static <T extends Appendable & CharSequence> void endOpenElement(T buffer) {
+		
+		append(buffer, endOpenElement());
+	}
+
+	public static <T extends Appendable & CharSequence> void openElement(T buffer, String name) {
+		
+		append(buffer, openElement(name));
+	}
+
+	public static <T extends Appendable & CharSequence> void closeElement(T buffer, String name) {
+
+		append(buffer, closeElement(name));
+	}
+
+	public static <T extends Appendable & CharSequence> void openCloseElement(T buffer, String name) {
+		
+		append(buffer, openCloseElement(name));
+	}
+
+	public static <T extends Appendable & CharSequence> void endOpenCloseElement(T buffer) {
+		
+		append(buffer, endOpenCloseElement());
+	}
+
+	public static <T extends Appendable & CharSequence> void appendAttribute(T buffer, String name, Object value) {
+
+		append(buffer, appendAttribute(name, value));
+	}
+
+	public static <T extends Appendable & CharSequence> void appendNullableAttribute(T buffer, String name, Object value) {
+
+		append(buffer, appendNullableAttribute(name, value));
+	}
+
+	public static <T extends Appendable & CharSequence> void appendComment(T buffer, String comment) {
+		
+		append(buffer, appendComment(comment));
+	}
+	
+	public static <T extends Appendable & CharSequence> void appendText(T buffer, String text) {
+
+		append(buffer, appendText(text));
+	}
+	
 	/**
-	 * Writes a comment on the given StringBuilder.
 	 * 
-	 * @param buffer The StringBuilder used to write comment.
-	 * @param comment The comment to write.
+	 * @deprecated It is useless
 	 */
-	public static void appendComment(StringBuilder buffer, String comment) {
-		buffer.append("<!-- ").append(comment).append(" -->");
-	}
+	@Deprecated
+	public static <T extends Appendable & CharSequence> void appendNewLine(T buffer) {
 
-	/**
-	 * Writes a comment on the given StringBuffer.
-	 * 
-	 * @param buffer The StringBuffer used to write comment.
-	 * @param comment The comment to write.
-	 */
-	public static void appendComment(StringBuffer writer, String comment) {
-		writer.append("<!-- ").append(comment).append(" -->");
+		Validate.notNull(buffer, "buffer cannot be null");
+		
+		append(buffer, SystemUtils.LINE_SEPARATOR);
 	}
-
+	
 }

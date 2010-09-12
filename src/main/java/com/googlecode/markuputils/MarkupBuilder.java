@@ -20,7 +20,6 @@ package com.googlecode.markuputils;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -35,11 +34,7 @@ public class MarkupBuilder implements Serializable {
 
 	private static final long serialVersionUID = 10L;
 
-	private final StringBuilder buffer;
-
-	public MarkupBuilder() {
-		buffer = new StringBuilder();
-	}
+	private final StringBuilder buffer = new StringBuilder();
 
 	/**
 	 * Start open element, appending &quot;&lt;&quot; plus element name.
@@ -52,10 +47,8 @@ public class MarkupBuilder implements Serializable {
 	 * @return a reference to this builder.
 	 */
 	public MarkupBuilder startOpenElement(String name) {
-
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("<").append(name);
-		}
+		
+		buffer.append(MarkupUtils.startOpenElement(name));
 
 		return this;
 	}
@@ -70,7 +63,7 @@ public class MarkupBuilder implements Serializable {
 	 */
 	public MarkupBuilder endOpenElement() {
 
-		buffer.append(">");
+		buffer.append(MarkupUtils.endOpenElement());
 
 		return this;
 	}
@@ -87,10 +80,8 @@ public class MarkupBuilder implements Serializable {
 	 * @return a reference to this builder.
 	 */
 	public MarkupBuilder openElement(String name) {
-
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("<").append(name).append(">");
-		}
+		
+		buffer.append(MarkupUtils.openElement(name));
 
 		return this;
 	}
@@ -108,9 +99,7 @@ public class MarkupBuilder implements Serializable {
 	 */
 	public MarkupBuilder closeElement(String name) {
 
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("</").append(name).append(">");
-		}
+		buffer.append(MarkupUtils.closeElement(name));
 
 		return this;
 	}
@@ -128,9 +117,8 @@ public class MarkupBuilder implements Serializable {
 	 */
 	public MarkupBuilder openCloseElement(String name) {
 
-		if (StringUtils.isNotBlank(name)) {
-			buffer.append("<").append(name).append("/>");
-		}
+		buffer.append(MarkupUtils.openCloseElement(name));
+		
 		return this;
 	}
 
@@ -144,7 +132,7 @@ public class MarkupBuilder implements Serializable {
 	 */
 	public MarkupBuilder endOpenCloseElement() {
 
-		buffer.append("/>");
+		buffer.append(MarkupUtils.endOpenCloseElement());
 
 		return this;
 	}
@@ -157,10 +145,8 @@ public class MarkupBuilder implements Serializable {
 	 * @return a reference to this builder.
 	 */
 	public MarkupBuilder appendText(String text) {
-
-		if (StringUtils.isNotEmpty(text)) {
-			buffer.append(text);
-		}
+		
+		buffer.append(MarkupUtils.appendText(text));
 
 		return this;
 	}
@@ -190,10 +176,14 @@ public class MarkupBuilder implements Serializable {
 	 */
 	public MarkupBuilder appendAttribute(String name, String value) {
 
-		if (StringUtils.isNotBlank(value)) {
-			BufferUtils.ensureSpaceBefore(buffer);
-			buffer.append(name).append("=\"").append(value).append("\"");
-		}
+		buffer.append(MarkupUtils.appendAttribute(name, value));
+
+		return this;
+	}
+	
+	public MarkupBuilder appendNullableAttribute(String name, String value) {
+
+		buffer.append(MarkupUtils.appendNullableAttribute(name, value));
 
 		return this;
 	}
@@ -207,10 +197,8 @@ public class MarkupBuilder implements Serializable {
 	 * @return a reference to this builder.
 	 */
 	public MarkupBuilder appendComment(String comment) {
-
-		if (StringUtils.isNotBlank(comment)) {
-			buffer.append("<!-- ").append(comment).append(" -->");
-		}
+		
+		buffer.append(MarkupUtils.appendComment(comment));
 
 		return this;
 
@@ -237,10 +225,12 @@ public class MarkupBuilder implements Serializable {
 	public boolean equals(Object obj) {
 		EqualsBuilder builder = new EqualsBuilder();
 
-		builder.appendSuper(obj instanceof MarkupBuilder);
-		if (builder.isEquals()) {
+		if (obj instanceof MarkupBuilder) {
 			MarkupBuilder other = (MarkupBuilder) obj;
 			builder.append(buffer, other.buffer);
+		}
+		else {
+			builder.appendSuper(false);
 		}
 
 		return builder.isEquals();

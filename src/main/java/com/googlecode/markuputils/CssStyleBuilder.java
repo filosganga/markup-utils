@@ -20,8 +20,6 @@ package com.googlecode.markuputils;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -36,47 +34,36 @@ public class CssStyleBuilder implements Serializable {
 
 	private static final long serialVersionUID = 10L;
 
-	private final StringBuilder buffer;
+	private final StringBuilder buffer = new StringBuilder();
+	
+	public CssStyleBuilder openSelector(String selector) {
 
-	public CssStyleBuilder() {
-		buffer = new StringBuilder();
+		CssStyleUtils.ensureSpaceBefore(buffer);
+		buffer.append(CssStyleUtils.openSelector(selector));
+
+		return this;
 	}
 
 	public CssStyleBuilder appendProperty(String name, Object value) {
 
-		String valueText = ObjectUtils.toString(value);
-
-		if (StringUtils.isNotBlank(valueText)) {
-			BufferUtils.ensureSemicolonBefore(buffer);
-			buffer.append(name).append(":").append(valueText);
-		}
+		buffer.append(CssStyleUtils.appendProperty(name, value));
 
 		return this;
 	}
 
 	public CssStyleBuilder appendStyle(String style) {
 
-		if (StringUtils.isNotBlank(style)) {
-			BufferUtils.ensureSemicolonBefore(buffer);
-			buffer.append(style);
-		}
+		CssStyleUtils.ensureSemicolonBefore(buffer);
+		buffer.append(CssStyleUtils.appendStyle(style));
 
 		return this;
 	}
 
-	public CssStyleBuilder openSelector(String selector) {
 
-		if (StringUtils.isNotBlank(selector)) {
-			BufferUtils.ensureSpaceBefore(buffer);
-			buffer.append(selector).append(" {");
-		}
-
-		return this;
-	}
 
 	public CssStyleBuilder closeSelector() {
 
-		buffer.append("}");
+		buffer.append(CssStyleUtils.closeSelector());
 
 		return this;
 	}
@@ -101,7 +88,6 @@ public class CssStyleBuilder implements Serializable {
 
 	@Override
 	public String toString() {
-
 		return toCssStyle();
 	}
 
@@ -109,10 +95,12 @@ public class CssStyleBuilder implements Serializable {
 	public boolean equals(Object obj) {
 		EqualsBuilder builder = new EqualsBuilder();
 
-		builder.appendSuper(obj instanceof CssStyleBuilder);
-		if (builder.isEquals()) {
+		if (obj instanceof CssStyleBuilder) {
 			CssStyleBuilder other = (CssStyleBuilder) obj;
 			builder.append(buffer, other.buffer);
+		}
+		else {
+			builder.appendSuper(false);
 		}
 
 		return builder.isEquals();

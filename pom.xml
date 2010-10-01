@@ -1,6 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>com.googlecode</groupId>
 	<artifactId>markuputils</artifactId>
 	<packaging>jar</packaging>
@@ -14,12 +15,12 @@
 	<licenses>
 		<license>
 			<name>GNU General Public License, version 3</name>
-			<url>http://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
+			<url>http://www.gnu.org/licenses/gpl.txt</url>
 			<comments>Read the COPYING file</comments>
 		</license>
 		<license>
-			<name>GNU General Public License, version 3</name>
-			<url>http://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
+			<name>GNU Lesser General Public License, version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.txt</url>
 			<comments>Read the COPYING.LESSER file</comments>
 		</license>
 	</licenses>
@@ -40,16 +41,6 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
-		<developer>
-			<id>fantayeneh</id>
-			<name>Asres Gizaw Fantayeneh</name>
-			<email>fantayeneh@gmail.com</email>
-			<timezone>0</timezone>
-			<roles>
-				<role>Project Manager</role>
-				<role>Developer</role>
-			</roles>
-		</developer>	
 	</developers>
 
 	<scm>
@@ -57,36 +48,30 @@
 		<developerConnection>scm:svn:https://markup-utils.googlecode.com/svn/trunk/</developerConnection>
 		<url>http://code.google.com/p/markup-utils/source/browse/</url>
 	</scm>
-
+	
 	<distributionManagement>
-		<!-- 
-		<site>
-			<id>site.mobilefaces.org</id>
-			<name>WURFL-Pro Maven Site</name>
-			<url>scpexe://didone.mobilefaces.org:/var/www/mobilefaces.org/htdocs/maven/markup-utils</url>
-		</site>
-		<repository>
-			<id>repo.mobilefaces.org</id>
-			<name>WURFL-Pro Repository</name>
-			<url>http://didone.mobilefaces.org/nexus/content/repositories/releases</url>
-		</repository>
+        <repository>
+            <id>data-access-repository</id>
+            <name>data-access-repo</name>
+            <url>svn:https://markup-utils.googlecode.com/svn/repository/releases</url>
+        </repository>
 		<snapshotRepository>
-			<id>snapshot.mobilefaces.org</id>
-			<name>WURFL-Pro Snapshot Repository</name>
-			<url>http://didone.mobilefaces.org/nexus/content/repositories/snapshots</url>
+            <id>data-access-snapshots</id>
+            <name>data-access-repo</name>
+            <url>svn:https://markup-utils.googlecode.com/svn/repository/snapshots</url>
 		</snapshotRepository>
-		 -->
 	</distributionManagement>
 	
 	<properties>
-		<sl4j.version>1.5.5</sl4j.version>
+		<sl4j.version>1.6.1</sl4j.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.3</version>
+			<version>2.4</version>
 		</dependency>
 
 		<!-- LOGGING DEPENDENCIES -->
@@ -95,7 +80,6 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${sl4j.version}</version>
 		</dependency>
-
 
 		<!-- Testing -->
 		<dependency>
@@ -111,26 +95,23 @@
 			<classifier>jdk15</classifier>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${sl4j.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	
 	<!-- Build -->
 	<build>
 
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.9</version>
+            </extension>
+        </extensions>	
+        
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
@@ -140,98 +121,98 @@
 
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-				</configuration>
-			</plugin>
-
-			<!-- 
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<suiteXmlFiles>
-						<suiteXmlFile>
-							src/test/resources/testng.xml
-						</suiteXmlFile>
-					</suiteXmlFiles>
-				</configuration>
-			</plugin>
-			-->
 			
 			<plugin>
-            	<groupId>com.google.code.maven-license-plugin</groupId>
-            	<artifactId>maven-license-plugin</artifactId>
-            	<version>1.4.0</version>
-				<configuration>
-					<header>src/main/etc/header.txt</header>
-	                <properties>
-	                    <years>2009</years>
-	                    <organization.name>${project.organization.name}</organization.name>
-	                </properties>	                
-	                <mapping>
-						<java>SLASHSTAR_STYLE</java>
-					</mapping>
-				</configuration>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			
 			<plugin>
 				<artifactId>maven-site-plugin</artifactId>
+				<version>2.1.1</version>
 				<configuration>
-					<outputEncoding>UTF-8</outputEncoding>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-
+			
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-5</version>
 				<configuration>
 					<descriptorRefs>
 						<descriptorRef>src</descriptorRef>
 					</descriptorRefs>
 				</configuration>
 			</plugin>
-
+			
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			
+			<plugin>
+            	<groupId>com.mycila.maven-license-plugin</groupId>
+            	<artifactId>maven-license-plugin</artifactId>
+            	<version>1.8.0</version>
+            	<executions>
+				<execution>
+					<id></id>
+					<phase>verify</phase>
+					<goals>
+						<goal>check</goal>
+					</goals>
+					<configuration>
+						<!-- Empty -->
+					</configuration>
+				</execution>
+            	</executions>
+				<configuration>
+					<header>src/main/etc/header.txt</header>
+	                <properties>
+	                    <years>2009</years>
+	                    <organization.name>${project.organization.name}</organization.name>
+	                </properties>	                
+				</configuration>
+			</plugin>
 
 		</plugins>
 	</build>
 
 	<reporting>
+	
 		<plugins>
 			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<configuration>
-					<targetJdk>1.5</targetJdk>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clover-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.6</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-changelog-plugin</artifactId>
+				<version>2.2</version>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.5</version>
 				<configuration>
-					<threshold>Normal</threshold>
+					<targetJdk>1.5</targetJdk>
 				</configuration>
 			</plugin>
 		</plugins>

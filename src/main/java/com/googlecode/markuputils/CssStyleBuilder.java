@@ -59,8 +59,6 @@ public class CssStyleBuilder implements Serializable {
 		return this;
 	}
 
-
-
 	public CssStyleBuilder closeSelector() {
 
 		buffer.append(CssStyleUtils.closeSelector());

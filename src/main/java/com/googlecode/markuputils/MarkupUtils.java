@@ -102,7 +102,7 @@ public final class MarkupUtils {
 
 		StringBuilder buffer = new StringBuilder();
 
-		String valueString = ObjectUtils.toString(value);
+		String valueString = ObjectUtils.toString(value).trim();
 
 		if (StringUtils.isNotBlank(valueString)) {
 			buffer.append(" ").append(name).append("=\"").append(valueString).append("\"");
@@ -116,9 +116,11 @@ public final class MarkupUtils {
 
 		StringBuilder buffer = new StringBuilder();
 
-		String valueString = ObjectUtils.toString(value);
-
-		buffer.append(" ").append(name).append("=\"").append(valueString).append("\"");
+		String valueString = ObjectUtils.toString(value).trim();
+		
+		if(StringUtils.isNotBlank(name)) {
+			buffer.append(" ").append(name).append("=\"").append(valueString).append("\"");
+		}
 		
 		return buffer.toString();
 	}
@@ -127,7 +129,7 @@ public final class MarkupUtils {
 		
 		StringBuilder buffer = new StringBuilder();
 		
-		if(StringUtils.isNotEmpty(comment)) {
+		if(StringUtils.isNotBlank(comment)) {
 			buffer.append("<!-- ").append(comment).append(" -->");
 		}
 		
@@ -198,7 +200,7 @@ public final class MarkupUtils {
 	
 	/**
 	 * 
-	 * @deprecated It is useless
+	 * @deprecated It is useless.
 	 */
 	@Deprecated
 	public static <T extends Appendable & CharSequence> void appendNewLine(T buffer) {
